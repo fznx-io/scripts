@@ -14,4 +14,7 @@ def indexing():
     jira_user = os.environ["ISSUE_KEY"]
     jira_token = os.environ["JIRA_TOKEN"]
 
+    con = psycopg2.connect(database="DATABASE", user="USER", password=admin_pwd, host="HOST", port="5432")
+    cur = con.cursor()
+
     pass
