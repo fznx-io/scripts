@@ -16,5 +16,8 @@ def indexing():
 
     con = psycopg2.connect(database="DATABASE", user="USER", password=admin_pwd, host="HOST", port="5432")
     cur = con.cursor()
+    cur.execute("SELECT ips FROM mongo_hosts WHERE service = '" + service + "'")
+    ips = cur.fetchone()
+    ip = ips[0]
 
     pass
