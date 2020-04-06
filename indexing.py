@@ -19,5 +19,8 @@ def indexing():
     cur.execute("SELECT ips FROM mongo_hosts WHERE service = '" + service + "'")
     ips = cur.fetchone()
     ip = ips[0]
+    cur.execute("SELECT password FROM users WHERE username = 'USER'")
+    pwds = cur.fetchone()
+    pwd = pwds[0]
 
     pass
