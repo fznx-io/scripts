@@ -22,5 +22,7 @@ def indexing():
     cur.execute("SELECT password FROM users WHERE username = 'USER'")
     pwds = cur.fetchone()
     pwd = pwds[0]
+    client = MongoClient("mongodb://USER:" + pwd + "@" + ip + "/" + database + "?replicaSet=rs-" + database + "-query")
+    db_con = client[database]
 
     pass
