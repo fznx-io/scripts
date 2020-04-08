@@ -13,6 +13,8 @@ def indexing():
     issue_key = os.environ["ISSUE_KEY"]
     jira_user = os.environ["ISSUE_KEY"]
     jira_token = os.environ["JIRA_TOKEN"]
+    jira_header = {"server": "https://XXXXX.atlassian.net"}
+    jenkins_build_url = os.environ["BUILD_URL"] + "console"
 
     con = psycopg2.connect(database="DATABASE", user="USER", password=admin_pwd, host="HOST", port="5432")
     cur = con.cursor()
