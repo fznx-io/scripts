@@ -27,4 +27,7 @@ def indexing():
     client = MongoClient("mongodb://USER:" + pwd + "@" + ip + "/" + database + "?replicaSet=rs-" + database + "-query")
     db_con = client[database]
 
+    jira_con = JIRA(jira_header, basic_auth=(jira_user, jira_token))
+    issue = jira_con.issue(issue_key)
+
     pass
