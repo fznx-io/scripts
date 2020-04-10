@@ -30,4 +30,7 @@ def indexing():
     jira_con = JIRA(jira_header, basic_auth=(jira_user, jira_token))
     issue = jira_con.issue(issue_key)
 
+    to_inprogress = jira_con.transition_issue(issue, '91')
+    print(to_inprogress)
+
     pass
