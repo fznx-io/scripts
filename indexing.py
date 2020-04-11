@@ -33,4 +33,6 @@ def indexing():
     to_inprogress = jira_con.transition_issue(issue, '91')
     print(to_inprogress)
 
+    jira_con.add_comment(issue, jenkins_build_url)
+
     pass
