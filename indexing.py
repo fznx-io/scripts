@@ -34,5 +34,7 @@ def indexing():
     print(to_inprogress)
 
     jira_con.add_comment(issue, jenkins_build_url)
+    index_before = db_con[collection].index_information()
+    print("index before changed :\n", index_before, "\n")
 
     pass
