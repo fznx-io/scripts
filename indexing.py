@@ -36,5 +36,7 @@ def indexing():
     jira_con.add_comment(issue, jenkins_build_url)
     index_before = db_con[collection].index_information()
     print("index before changed :\n", index_before, "\n")
+    changes = db_con[collection].create_index([(new_index, pymongo.ASCENDING)], background=True)
+    print("index added : ", changes, "\n")
 
     pass
