@@ -38,5 +38,7 @@ def indexing():
     print("index before changed :\n", index_before, "\n")
     changes = db_con[collection].create_index([(new_index, pymongo.ASCENDING)], background=True)
     print("index added : ", changes, "\n")
+    index_after = db_con[collection].index_information()
+    print("index after changed :\n", index_after, "\n")
 
     pass
