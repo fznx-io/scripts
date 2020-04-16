@@ -41,4 +41,7 @@ def indexing():
     index_after = db_con[collection].index_information()
     print("index after changed :\n", index_after, "\n")
 
+    to_done = jira_con.transition_issue(issue, '41')
+    print(to_done)
+
     pass
