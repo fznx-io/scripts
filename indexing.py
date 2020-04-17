@@ -33,15 +33,21 @@ def indexing():
     to_inprogress = jira_con.transition_issue(issue, '91')
     print(to_inprogress)
 
-    jira_con.add_comment(issue, jenkins_build_url)
-    index_before = db_con[collection].index_information()
-    print("index before changed :\n", index_before, "\n")
-    changes = db_con[collection].create_index([(new_index, pymongo.ASCENDING)], background=True)
-    print("index added : ", changes, "\n")
-    index_after = db_con[collection].index_information()
-    print("index after changed :\n", index_after, "\n")
+    try:
+        jira_con.add_comment(issue, jenkins_build_url)
+        index_before = db_con[collection].index_information()
+        print("index before changed :\n", index_before, "\n")
+        changes = db_con[collection].create_index([(new_index, pymongo.ASCENDING)], background=True)
+        print("index added : ", changes, "\n")
+        index_after = db_con[collection].index_information()
+        print("index after changed :\n", index_after, "\n")
 
-    to_done = jira_con.transition_issue(issue, '41')
-    print(to_done)
+        to_done = jira_con.transition_issue(issue, '41')
+        print(to_done)
+
+    except:
+        print("pipeline failed")
+        to_done = jira_con.transition_issue(issue, '61')
+        print(to_done)
 
     pass
