@@ -50,4 +50,4 @@ def indexing():
         to_done = jira_con.transition_issue(issue, '61')
         print(to_done)
 
-    pass
+indexing()
