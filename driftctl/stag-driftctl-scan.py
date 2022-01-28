@@ -3,8 +3,8 @@ import random
 import sys
 import requests
 import os
-from secrets import SLACK_WEBHOOK_URL
-stream = os.popen('GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_STAGE} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-asiase1-npe-stage/terraform/npe/stage/default.tfstate')
+from secrets import SLACK_WEBHOOK_URL, GOOGLE_APPLICATION_CREDENTIALS, GCP_PROJECT_STAGE
+stream = os.popen(f'GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_STAGE} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-asiase1-npe-stage/terraform/npe/stage/default.tfstate')
 output = stream.read()
 output
 

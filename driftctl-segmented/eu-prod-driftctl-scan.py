@@ -3,7 +3,8 @@ import random
 import sys
 import requests
 import os
-stream = os.popen('GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_EU_PROD} driftctl scan --quiet  --to gcp+tf --from tfstate+gs://ts-cloudstorage-terraform-prod/terraform/prod/{GCS_BUCKET_PATH_EU_PROD}/default.tfstate')
+from secrets import SLACK_WEBHOOK_URL, GOOGLE_APPLICATION_CREDENTIALS, GCP_PROJECT_EU_PROD, GCS_BUCKET_PATH_EU_PROD
+stream = os.popen(f'GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_EU_PROD} driftctl scan --quiet  --to gcp+tf --from tfstate+gs://ts-cloudstorage-terraform-prod/terraform/prod/{GCS_BUCKET_PATH_EU_PROD}/default.tfstate')
 output = stream.read()
 output
 
@@ -37,9 +38,9 @@ import random
 import sys
 import requests
 import os
-from secrets import SLACK_WEBHOOK_URL
+from secrets import SLACK_WEBHOOK_URL, GOOGLE_APPLICATION_CREDENTIALS, GCP_PROJECT_EU_PROD, GCS_BUCKET_PATH_EU_PROD
 
-os.system("GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_EU_PROD} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-terraform-prod/terraform/prod/{GCS_BUCKET_PATH_EU_PROD}/default.tfstate > eu-prod-output")
+os.system(f"GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_EU_PROD} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-terraform-prod/terraform/prod/{GCS_BUCKET_PATH_EU_PROD}/default.tfstate > eu-prod-output")
 
 stream = os.popen("sed -n '1,100p' eu-prod-output ")
 output = stream.read()

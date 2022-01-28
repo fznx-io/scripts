@@ -3,9 +3,9 @@ import random
 import sys
 import requests
 import os
-from secrets import SLACK_WEBHOOK_URL
+from secrets import SLACK_WEBHOOK_URL, GOOGLE_APPLICATION_CREDENTIALS, GCP_PROJECT_UAT
 
-os.system("GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_UAT} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-asiase1-npe-uat/terraform/npe/uat/default.tfstate > uat-output")
+os.system(f"GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_UAT} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-asiase1-npe-uat/terraform/npe/uat/default.tfstate > uat-output")
 
 stream = os.popen("sed -n '1,150p' uat-output ")
 output = stream.read()
