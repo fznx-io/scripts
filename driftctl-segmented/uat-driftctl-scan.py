@@ -6,13 +6,15 @@ import os
 
 os.system("GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_UAT} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-asiase1-npe-uat/terraform/npe/uat/default.tfstate > uat-output")
 
-stream = os.popen("sed -n '1,100p' uat-output ")
+stream = os.popen("sed -n '1,150p' uat-output ")
 output = stream.read()
 output
-
-stream2 = os.popen("sed -n '101,200p' uat-output ")
+stream2 = os.popen("sed -n '150,300p' uat-output ")
 output2 = stream2.read()
 output2
+stream3 = os.popen("sed -n '300,450p' uat-output ")
+output3 = stream3.read()
+output3
 
 def slack_notification_content(messages):
      slack_data = {
@@ -24,6 +26,7 @@ def slack_notification_content(messages):
 def slack_webhook(webhook_url):
     slack_data = slack_notification_content(output)
     slack_data2 = slack_notification_content(output2)
+    slack_data3 = slack_notification_content(output3)
     headers = {
         'Content-Type': "application/json",
     }
@@ -37,7 +40,12 @@ def slack_webhook(webhook_url):
         data=json.dumps(slack_data2),
         headers=headers
     )
-    if response.status_code and response2.status_code == 200:
+    response3 = requests.post(
+        webhook_url,
+        data=json.dumps(slack_data3),
+        headers=headers
+    )
+    if response.status_code and response2.status_code and response3.status_code == 200:
         print("Scan result sucessfully sent")
 
 if __name__ == '__main__':
