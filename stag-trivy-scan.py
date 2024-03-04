@@ -9,3 +9,7 @@ os.system("trivy config /home/tabs/gcp-deployment/platform-engineering/npe/STAGE
 stream = os.popen("sed -n '1,100p' trivy-stage-output ")
 output = stream.read()
 output
+
+stream2 = os.popen("sed -n '101,200p' trivy-stage-output ")
+output2 = stream2.read()
+output2
