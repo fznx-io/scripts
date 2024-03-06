@@ -21,3 +21,22 @@ def slack_notification_content(messages):
          "text":messages
      }
      return slack_data
+
+def slack_webhook(webhook_url):
+    slack_data = slack_notification_content(output)
+    slack_data2 = slack_notification_content(output2)
+    headers = {
+        'Content-Type': "application/json",
+    }
+    response = requests.post(
+        webhook_url,
+        data=json.dumps(slack_data),
+        headers=headers
+    )
+    response2 = requests.post(
+        webhook_url,
+        data=json.dumps(slack_data2),
+        headers=headers
+    )
+    if response.status_code and response2.status_code == 200:
+        print("Scan result sucessfully sent")
