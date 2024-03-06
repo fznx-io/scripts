@@ -40,3 +40,7 @@ def slack_webhook(webhook_url):
     )
     if response.status_code and response2.status_code == 200:
         print("Scan result sucessfully sent")
+
+if __name__ == '__main__':
+    webhook_url = "PLACEHOLDER_WEBHOOK_URL"
+    slack_webhook(webhook_url)
