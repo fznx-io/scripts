@@ -16,7 +16,7 @@ output2
 
 def slack_notification_content(messages):
      slack_data = {
-         "username": "Trivy Staging Scan Result",
+         "username": "STAGING Trivy Scan Result",
          "channel": "#ts-trivy-scan",
          "text":messages
      }
