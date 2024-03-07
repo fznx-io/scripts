@@ -14,6 +14,10 @@ stream2 = os.popen("sed -n '101,200p' trivy-stage-output ")
 output2 = stream2.read()
 output2
 
+stream3 = os.popen("sed -n '201,300p' trivy-stage-output ")
+output3 = stream2.read()
+output3
+
 def slack_notification_content(messages):
      slack_data = {
          "username": "STAGING Trivy Scan Result",
@@ -25,6 +29,7 @@ def slack_notification_content(messages):
 def slack_webhook(webhook_url):
     slack_data = slack_notification_content(output)
     slack_data2 = slack_notification_content(output2)
+    slack_data3 = slack_notification_content(output3)
     headers = {
         'Content-Type': "application/json",
     }
@@ -36,6 +41,11 @@ def slack_webhook(webhook_url):
     response2 = requests.post(
         webhook_url,
         data=json.dumps(slack_data2),
+        headers=headers
+    )
+    response3 = requests.post(
+        webhook_url,
+        data=json.dumps(slack_data3),
         headers=headers
     )
     if response.status_code and response2.status_code == 200:
