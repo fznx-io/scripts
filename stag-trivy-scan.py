@@ -3,6 +3,7 @@ import random
 import sys
 import requests
 import os
+from secrets import TRIVY_SLACK_WEBHOOK_URL
 
 os.system("trivy config /home/tabs/gcp-deployment/platform-engineering/npe/STAGE > trivy-stage-output")
 
@@ -52,5 +53,5 @@ def slack_webhook(webhook_url):
         print("Scan result sucessfully sent")
 
 if __name__ == '__main__':
-    webhook_url = "PLACEHOLDER_WEBHOOK_URL"
+    webhook_url = TRIVY_SLACK_WEBHOOK_URL
     slack_webhook(webhook_url)
