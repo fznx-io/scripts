@@ -3,6 +3,7 @@ import random
 import sys
 import requests
 import os
+from secrets import SLACK_WEBHOOK_URL
 
 os.system("GOOGLE_APPLICATION_CREDENTIALS={GOOGLE_APPLICATION_CREDENTIALS} CLOUDSDK_CORE_PROJECT={GCP_PROJECT_STAGE} driftctl scan --quiet --to gcp+tf --from tfstate+gs://ts-cloudstorage-asiase1-npe-stage/terraform/npe/stage/default.tfstate > stage-output")
 
@@ -41,5 +42,5 @@ def slack_webhook(webhook_url):
         print("Scan result sucessfully sent")
 
 if __name__ == '__main__':
-    webhook_url = "SLACK_WEBHOOK_URL"
+    webhook_url = SLACK_WEBHOOK_URL
     slack_webhook(webhook_url)
