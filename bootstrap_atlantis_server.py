@@ -20,5 +20,38 @@ def reserve_static_ip(project_id, region, address_name):
         return response.address
 
 def create_vm(project_id, zone, instance_name, machine_type, source_image, startup_script, external_ip):
-    # TODO: Implement VM creation
-    pass
+    # Initialize the client
+    instance_client = compute_v1.InstancesClient()
+
+    # Define the machine type (e.g., "n1-standard-1")
+    machine_type_path = f"zones/{zone}/machineTypes/{machine_type}"
+
+    # Define the image to use
+    image_client = compute_v1.ImagesClient()
+    image_response = image_client.get_from_family(project="debian-cloud", family=source_image)
+    source_disk_image = image_response.self_link
+
+    # Define the startup script metadata
+    metadata_items = [
+        {
+            "key": "startup-script",
+            "value": startup_script,
+        }
+    ]
+
+    # Define the disk
+    disk = compute_v1.AttachedDisk()
+    initialize_params = compute_v1.AttachedDiskInitializeParams(
+        source_image=source_disk_image,
+        disk_size_gb=10,  # Specify disk size (in GB)
+        disk_type=f"zones/{zone}/diskTypes/pd-standard",
+    )
+    disk.auto_delete = True
+    disk.boot = True
+    disk.initialize_params = initialize_params
+
+    # Define the network interface with an external static IP
+    network_interface = compute_v1.NetworkInterface(
+        name="global/networks/default",
+        access_configs=[compute_v1.AccessConfig(name="External NAT", nat_ip=external_ip)],
+    )
