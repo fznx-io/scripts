@@ -55,3 +55,26 @@ def create_vm(project_id, zone, instance_name, machine_type, source_image, start
         name="global/networks/default",
         access_configs=[compute_v1.AccessConfig(name="External NAT", nat_ip=external_ip)],
     )
+
+    # Create the instance configuration
+    instance = compute_v1.Instance(
+        name=instance_name,
+        machine_type=machine_type_path,
+        disks=[disk],
+        network_interfaces=[network_interface],
+        metadata=compute_v1.Metadata(items=metadata_items),
+    )
+
+    # Create the instance in the specified project and zone
+    operation = instance_client.insert(project=project_id, zone=zone, instance_resource=instance)
+
+    print(f"Creating instance {instance_name}...")
+
+    # Wait for the operation to complete
+    operation_client = compute_v1.ZoneOperationsClient()
+    result = operation_client.wait(project=project_id, zone=zone, operation=operation.name)
+
+    if result.error:
+        print(f"Failed to create instance {instance_name}: {result.error}")
+    else:
+        print(f"Instance {instance_name} created successfully.")
