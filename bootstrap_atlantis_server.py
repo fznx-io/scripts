@@ -1,5 +1,6 @@
 from google.cloud import compute_v1
 from google.oauth2 import service_account
+from secrets import GCP_PROJECT_ID, GCP_REGION, GCP_ZONE
 
 def reserve_static_ip(project_id, region, address_name):
     address_client = compute_v1.AddressesClient()
@@ -78,3 +79,53 @@ def create_vm(project_id, zone, instance_name, machine_type, source_image, start
         print(f"Failed to create instance {instance_name}: {result.error}")
     else:
         print(f"Instance {instance_name} created successfully.")
+
+if __name__ == "__main__":
+    # Define GCP project details
+    PROJECT_ID = GCP_PROJECT_ID
+    REGION = GCP_REGION
+    ZONE = GCP_ZONE
+    INSTANCE_NAME = "atlantis-vm"
+    MACHINE_TYPE = "e2-medium"
+    SOURCE_IMAGE_FAMILY = "debian-10"  # Debian family image
+    STATIC_IP_NAME = "atlantis-static-ip"  # Name for the reserved IP
+
+    # Reserve a static external IP
+    reserved_ip = reserve_static_ip(PROJECT_ID, REGION, STATIC_IP_NAME)
+
+    # Define the startup script to install Atlantis, using the reserved static IP
+    STARTUP_SCRIPT = f"""#!/bin/bash
+    # Update and install dependencies
+    apt-get update
+    apt-get install -y wget unzip curl
+
+    # Download and install Atlantis
+    wget https://github.com/runatlantis/atlantis/releases/download/v0.17.3/atlantis_linux_amd64.zip
+    unzip atlantis_linux_amd64.zip
+    mv atlantis /usr/local/bin/
+
+    # Create a directory for Atlantis data
+    mkdir -p /etc/atlantis
+
+    # Set up a basic config file (you should customize this as needed)
+    cat <<EOF > /etc/atlantis/config.yaml
+    atlantis-url: http://{reserved_ip}:4141
+    EOF
+
+    # Start Atlantis on boot
+    echo "[Unit]
+    Description=Atlantis
+
+    [Service]
+    ExecStart=/usr/local/bin/atlantis server --config /etc/atlantis/config.yaml
+
+    [Install]
+    WantedBy=multi-user.target" > /etc/systemd/system/atlantis.service
+
+    # Enable and start the Atlantis service
+    systemctl enable atlantis.service
+    systemctl start atlantis.service
+    """
+
+    # Create the VM
+    create_vm(PROJECT_ID, ZONE, INSTANCE_NAME, MACHINE_TYPE, SOURCE_IMAGE_FAMILY, STARTUP_SCRIPT, reserved_ip)
